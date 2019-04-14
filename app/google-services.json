@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "470308377064",
+    "firebase_url": "https://gamifikasi-eb89c.firebaseio.com",
+    "project_id": "gamifikasi-eb89c",
+    "storage_bucket": "gamifikasi-eb89c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:470308377064:android:02ab6201bcfdf432",
+        "android_client_info": {
+          "package_name": "com.example.kota203.quizmuseumgeologi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "470308377064-bhnhufjs6slktsfakndu3d3pkcdejli3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kota203.quizmuseumgeologi",
+            "certificate_hash": "d81e50a181eb3d504f7db15473ce1506552cccb4"
+          }
+        },
+        {
+          "client_id": "470308377064-gru9mt9prtmjdfa63j9j5g31rgetr5uk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxj_0ciB5WpR6YqiMq1wm3U6ylxEA8uEw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "470308377064-gru9mt9prtmjdfa63j9j5g31rgetr5uk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
