@@ -1,119 +1,139 @@
-package com.example.kota203.quizmuseumgeologi.Interface.Peserta;
+package com.example.kota203.museumgeologi_v0.Interface.Peserta;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.support.v7.app.AlertDialog;
-import android.content.DialogInterface;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kota203.quizmuseumgeologi.LoginGuruActivity;
-import com.example.kota203.quizmuseumgeologi.ManajemenKuisActivity;
-import com.example.kota203.quizmuseumgeologi.Model.Permainan;
-import com.example.kota203.quizmuseumgeologi.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.rengwuxian.materialedittext.MaterialEditText;
+import com.example.kota203.museumgeologi_v0.Interface.Koordinator.LoginKoordinatorActivity;
+import com.example.kota203.museumgeologi_v0.Model.Klasifikasi;
+import com.example.kota203.museumgeologi_v0.Model.Kuis;
+import com.example.kota203.museumgeologi_v0.Model.Peserta;
+import com.example.kota203.museumgeologi_v0.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InfoKelompokActivity extends AppCompatActivity {
 
-    Button button_mulai_permainan_peserta, btn_keluar;
-    FirebaseDatabase database;
-    DatabaseReference permainan;
-    String Mulai = "true";
+    String status_kuis_mulai = "mulai";
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference dbkuis = db.collection("kuis");
+    private CollectionReference dbpeserta = db.collection("peserta");
+
+    Button btn_mulai_kuis_peserta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_info_kelompok_peserta);
-
-        database = FirebaseDatabase.getInstance();
-        permainan = database.getReference("Permainan");
+        setContentView(R.layout.activity_info_kelompok);
 
         Intent intent = getIntent();
-        String textNamaPeserta = intent.getStringExtra(LoginGuruActivity.EXTRA_TEXT_NAMA);
-        final String textKodePeserta = intent.getStringExtra(LoginGuruActivity.EXTRA_TEXT_KODE);
+        final String textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
+//        Toast.makeText(InfoKelompokActivity.this, textNamaPeserta, Toast.LENGTH_SHORT).show();
+        final String textIdPeserta = intent.getStringExtra("ID_PESERTA");
+//        Toast.makeText(InfoKelompokActivity.this, textIdPeserta, Toast.LENGTH_SHORT).show();
+        final String textIdKoor = intent.getStringExtra("ID_KOOR");
+//        Toast.makeText(InfoKelompokActivity.this, textIdKoor, Toast.LENGTH_SHORT).show();
 
-        btn_keluar = (Button) findViewById(R.id.btn_keluar);
-        btn_keluar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog();
-            }
-        });
-
-        button_mulai_permainan_peserta = (Button)findViewById(R.id.mulai_permainan_peserta);
-        button_mulai_permainan_peserta.setEnabled(false);
-        button_mulai_permainan_peserta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openActivityPetunjuk();
-            }
-        });
-
-        permainan.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Permainan mulai = dataSnapshot.child(textKodePeserta).getValue(Permainan.class);
-                if (mulai.getEnable().equals(Mulai)) {
-                    button_mulai_permainan_peserta.setEnabled(true);
-                    Toast.makeText(InfoKelompokActivity.this, mulai.getEnable(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        TextView textViewNamaPeserta = (TextView)findViewById(R.id.nama_peserta_db);
-//        TextView textViewKodePesesrta = (TextView)findViewById(R.id.kode_peserta_db);
+        TextView textViewKlasifikasi = (TextView) findViewById(R.id.klasifikasi);
+        TextView textViewKetKelompok = (TextView) findViewById(R.id.keterangan);
+        TextView textViewNamaPeserta = (TextView) findViewById(R.id.nama_peserta_db);
 
         textViewNamaPeserta.setText(textNamaPeserta);
-//        textViewKodePesesrta.setText("Kode Permainan : "+ textKodePeserta);
 
+        getData(textIdKoor, textIdPeserta, textViewKlasifikasi, textViewKetKelompok);
+        checkStatusKuis(textIdKoor);
+
+        btn_mulai_kuis_peserta = (Button)findViewById(R.id.btn_mulai_kuis_peserta);
+        btn_mulai_kuis_peserta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+            }
+        });
     }
 
-    private void openActivityPetunjuk() {
-        Intent intent = new Intent(InfoKelompokActivity.this, PetunjukActivity.class);
-    //        intent.putExtra(EXTRA_TEXT_KODE, kodePeserta);
-    //        intent.putExtra(EXTRA_TEXT_NAMA, namaPeserta);
-        startActivity(intent);
-    }
+    private void getData(String idKoor, String idPeserta, final TextView textViewKlasifikasi, final TextView textViewKetKelompok){
+        dbkuis.whereEqualTo("id_koordinator", idKoor)
+        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null){
+                    textViewKlasifikasi.setText("Listen Failed");
+                    return;
+                }
+                String klasifikasi = "";
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc.get("jenis_klasifikasi") != null) {
+                        Kuis data_kuis = doc.toObject(Kuis.class);
 
-    @Override
-    //untuk disabled fungsi back smartphone
-    public void onBackPressed()
-    {
-        Toast.makeText(InfoKelompokActivity.this,"Tekan buton keluar untuk keluar dari permainan",Toast.LENGTH_SHORT).show();
-        // Your Code Here. Leave empty if you want nothing to happen on back press.
-    }
-
-    private void showAlertDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setMessage("Keluar Permainan ?")
-                .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        Toast.makeText(InfoKelompokActivity.this, "Not Logout", Toast.LENGTH_SHORT).show();
+                        String jenis_klasifikasi = data_kuis.getJenis_klasifikasi();
+                        klasifikasi += "Jenis Klasifikasi Kuis : " +jenis_klasifikasi;
+                        textViewKlasifikasi.setText(klasifikasi);
+                    }else {
+                        textViewKlasifikasi.setText("Belum ditentukan");
                     }
-                })
-                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        Toast.makeText(InfoKelompokActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        dbpeserta.whereEqualTo("id_peserta", idPeserta)
+        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null){
+                    textViewKetKelompok.setText("Listen Failed");
+                    return;
+                }
+                String kelompok = "";
+                for (QueryDocumentSnapshot doc : value) {
+                    if (doc.get("kelompok") != null) {
+                        Peserta data_peserta = doc.toObject(Peserta.class);
+
+                        Integer kelompok_nomor = data_peserta.getKelompok();
+                        kelompok += "Kelompok : " +kelompok_nomor;
+                        textViewKetKelompok.setText(kelompok);
+                    }else {
+                        textViewKetKelompok.setText("Tunggu Koordinator membagikan kelompok");
                     }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                }
+            }
+        });
+    }
+
+    public void checkStatusKuis(String textKode){
+        dbkuis.whereEqualTo("id_koordinator", textKode)
+        .addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value,
+                                @Nullable FirebaseFirestoreException e) {
+            if (e != null){
+//                            textViewTotal.setText("Listen Failed");
+                return;
+            }
+            for (QueryDocumentSnapshot doc : value) {
+                Kuis status = doc.toObject(Kuis.class);
+                String status_kuis = status.getStatus_kuis();
+                if (status_kuis.equals(status_kuis_mulai)) { //mulai
+                    btn_mulai_kuis_peserta.setEnabled(true);
+                } else{  //belum mulai
+                    btn_mulai_kuis_peserta.setEnabled(false);
+                }
+            }
+            }
+        });
     }
 }

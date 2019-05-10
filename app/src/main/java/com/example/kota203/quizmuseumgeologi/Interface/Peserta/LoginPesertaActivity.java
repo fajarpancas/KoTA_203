@@ -1,29 +1,21 @@
-package com.example.kota203.quizmuseumgeologi.Interface.Peserta;
+package com.example.kota203.museumgeologi_v0.Interface.Peserta;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.widget.ViewGroupUtils;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.Toast;
 
-import com.example.kota203.quizmuseumgeologi.Model.Guru;
-import com.example.kota203.quizmuseumgeologi.Model.Permainan;
-import com.example.kota203.quizmuseumgeologi.Model.Peserta;
-import com.example.kota203.quizmuseumgeologi.Model.User;
-import com.example.kota203.quizmuseumgeologi.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.example.kota203.museumgeologi_v0.Model.Koordinator;
+import com.example.kota203.museumgeologi_v0.Model.Peserta;
+import com.example.kota203.museumgeologi_v0.R;
+import com.google.android.gms.common.internal.Objects;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Random;
@@ -31,66 +23,77 @@ import java.util.Random;
 public class LoginPesertaActivity extends AppCompatActivity {
     public static final String EXTRA_TEXT_NAMA = "com.example.application.example.EXTRA_TEXT";
     public static final String EXTRA_TEXT_KODE = "com.example.application.example.EXTRA_KODE";
+//    public static final String EXTRA_TEXT_IDPESERTA = "";
 
-    MaterialEditText entrnama_peserta, entr_kode_peserta;
+    MaterialEditText namaPeserta, idKoor;
     Button btn_sign_in_peserta;
     String id_pesertaS;
 
-    FirebaseDatabase database;
-    DatabaseReference permainan, peserta;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference dbkuis = db.collection("kuis");
+    private CollectionReference dbpeserta = db.collection("peserta");
+    private CollectionReference dbkoordinator = db.collection("koordinator");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_peserta);
 
-        database = FirebaseDatabase.getInstance();
-        peserta = database.getReference("Peserta");
-        permainan = database.getReference("Permainan");
-
-        entrnama_peserta = (MaterialEditText)findViewById(R.id.entrnama_peserta);
-        entr_kode_peserta = (MaterialEditText)findViewById(R.id.entr_kode_peserta);
+        namaPeserta = (MaterialEditText)findViewById(R.id.namaPeserta);
+        idKoor = (MaterialEditText)findViewById(R.id.idKoor);
 
         btn_sign_in_peserta = (Button)findViewById(R.id.btn_sign_in_peserta);
 
         btn_sign_in_peserta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                id_pesertaS = generateString(6);
-                signIn(id_pesertaS, entrnama_peserta.getText().toString(), entr_kode_peserta.getText().toString());
+                id_pesertaS = generateString(4);
+                signIn(namaPeserta.getText().toString(), idKoor.getText().toString());
             }
         });
     }
 
-    private void signIn(final String id_pesertaS, final String namaPeserta, final String kodePermainan) {
-        permainan.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!kodePermainan.isEmpty()){
-                    Permainan login = dataSnapshot.child(kodePermainan).getValue(Permainan.class);
-                    if (login.getKodePermainan().equals(kodePermainan)) {
-                        addNametoDB(id_pesertaS, namaPeserta, kodePermainan);
-                        openInfoKelompok(kodePermainan, namaPeserta);
+    private void signIn(final String namaPeserta, final String idKoor) {
+        dbkoordinator.whereEqualTo("id_koordinator", idKoor)
+            .get()
+            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!namaPeserta.isEmpty()) {
+                    if (!idKoor.isEmpty()) {
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            Koordinator koordinator = documentSnapshot.toObject(Koordinator.class);
+                            String idKoordinator = koordinator.getId_koordinator();
+
+                            if (!idKoordinator.equals(idKoor)) {
+                                Toast.makeText(LoginPesertaActivity.this, "Kode Salah", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(LoginPesertaActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                addNametoDB(idKoor, namaPeserta);
+//                                getDocIdKuis(idKoor, namaPeserta);
+                                openActivityInfoKelompok(namaPeserta, idKoor);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(LoginPesertaActivity.this, "Kode harus diisi", Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        Toast.makeText(LoginPesertaActivity.this, "Kode salah", Toast.LENGTH_SHORT).show();
+                } else {
+                    if(!idKoor.isEmpty()){
+                        Toast.makeText(LoginPesertaActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(LoginPesertaActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
                     }
                 }
-                else
-                    Toast.makeText(LoginPesertaActivity.this, "Kode harus diisi", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
     }
 
-    private void openInfoKelompok(String kodePeserta, String namaPeserta) {
+    private void openActivityInfoKelompok(String namaPeserta, String id_koordinator) {
+        Toast.makeText(LoginPesertaActivity.this, namaPeserta + id_pesertaS + id_koordinator, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(LoginPesertaActivity.this, InfoKelompokActivity.class);
-        intent.putExtra(EXTRA_TEXT_KODE, kodePeserta);
-        intent.putExtra(EXTRA_TEXT_NAMA, namaPeserta);
+        intent.putExtra("NAMA_PESERTA", namaPeserta);
+        intent.putExtra("ID_PESERTA", id_pesertaS);
+        intent.putExtra("ID_KOOR", id_koordinator);
         startActivity(intent);
     }
 
@@ -105,23 +108,29 @@ public class LoginPesertaActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    private void addNametoDB(final String idPeserta, final String namaPeserta, final String kodePermainan) {
-        if (!namaPeserta.isEmpty()) {
-
-            final Peserta peserta1 = new Peserta(idPeserta, namaPeserta);
-            peserta.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    peserta.child(kodePermainan).child(id_pesertaS).setValue(peserta1);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }else {
-            Toast.makeText(LoginPesertaActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
-        }
+    private void addNametoDB(String idKoor, final String namaPeserta) {
+        final Peserta peserta = new Peserta(idKoor, id_pesertaS, namaPeserta);
+        dbpeserta.add(peserta);
     }
+
+//    private void getDocIdKuis(final String idKoor, final String namaPeserta){
+//        dbkuis.whereEqualTo("id_koordinator", idKoor)
+//        .get()
+//        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//            @Override
+//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                    KuisKoordinator docIdKuis = documentSnapshot.toObject(KuisKoordinator.class);
+//                    docIdKuis.setDocumentId(documentSnapshot.getId());
+//                    String documentId = docIdKuis.getDocumentId();
+//                    addPesertatoKuisDB(documentId, namaPeserta );
+//                }
+//            }
+//        });
+//    }
+//
+//    private void addPesertatoKuisDB(String documentId, String namaPeserta) {
+//        final Peserta peserta = new Peserta(id_pesertaS, namaPeserta);
+//        dbkuis.document(documentId).collection("peserta").add(peserta);
 }
+
