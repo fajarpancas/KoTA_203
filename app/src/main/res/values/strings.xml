@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">QuizMuseumGeologi</string>
+    <string name="app_name">MuseumGeologi_v0</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="merah">Merah</string>
+    <string name="biru">Biru</string>
+    <string name="hijau">Hijau</string>
+    <string name="oranye">Orannye</string>
+    <string name="ungu">Ungu</string>
+    <string name="hitam">Hitam</string>
+
+    <style name="ButtonText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">3dp</item>
+    </style>
 </resources>

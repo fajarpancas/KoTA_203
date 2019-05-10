@@ -1,52 +1,45 @@
 {
   "project_info": {
-    "project_number": "470308377064",
-    "firebase_url": "https://gamifikasi-eb89c.firebaseio.com",
-    "project_id": "gamifikasi-eb89c",
-    "storage_bucket": "gamifikasi-eb89c.appspot.com"
+    "project_number": "537931301743",
+    "firebase_url": "https://gamifikasimuseum.firebaseio.com",
+    "project_id": "gamifikasimuseum",
+    "storage_bucket": "gamifikasimuseum.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:470308377064:android:02ab6201bcfdf432",
+        "mobilesdk_app_id": "1:537931301743:android:353444d72cdc6ea8",
         "android_client_info": {
-          "package_name": "com.example.kota203.quizmuseumgeologi"
+          "package_name": "com.example.kota203.museumgeologi_v0"
         }
       },
       "oauth_client": [
         {
-          "client_id": "470308377064-bhnhufjs6slktsfakndu3d3pkcdejli3.apps.googleusercontent.com",
+          "client_id": "537931301743-q8vduc05qhbk3lv8frin9eh448eaot2i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.kota203.quizmuseumgeologi",
+            "package_name": "com.example.kota203.museumgeologi_v0",
             "certificate_hash": "d81e50a181eb3d504f7db15473ce1506552cccb4"
           }
         },
         {
-          "client_id": "470308377064-gru9mt9prtmjdfa63j9j5g31rgetr5uk.apps.googleusercontent.com",
+          "client_id": "537931301743-ei5nfoijghqjuf87tuaj9f5b649l2v4e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAxj_0ciB5WpR6YqiMq1wm3U6ylxEA8uEw"
+          "current_key": "AIzaSyBwjPUJW6Sujv7oIbmMOU3dV_eS0XmOOO4"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "470308377064-gru9mt9prtmjdfa63j9j5g31rgetr5uk.apps.googleusercontent.com",
+              "client_id": "537931301743-ei5nfoijghqjuf87tuaj9f5b649l2v4e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

@@ -1,90 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context="com.example.kota203.quizmuseumgeologi.MainActivity">
+    android:orientation="vertical"
+    android:background="@drawable/bg2"
+    android:weightSum="10"
+    tools:context=".MainActivity">
 
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/info_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardElevation="4dp">
+        <TextView
+            android:id="@+id/textGrid"
+
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <GridLayout
+        android:id="@+id/mainGridbermain"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_weight="6"
+        android:alignmentMode="alignMargins"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:padding="20dp"
+        android:rowCount="3">
+
+        <!--Row 1, Column 1-->
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="85dp"
+            android:layout_marginRight="85dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="1dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
-                android:padding="16dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="6dp"
+                android:orientation="vertical">
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/entrnama_peserta"
-                    android:hint="Nama Anda"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary"
-                    android:textSize="20sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:met_baseColor="@color/colorPrimary"
-                    app:met_floatingLabel="highlight"
-                    app:met_primaryColor="@color/colorPrimary"
-                    app:met_singleLineEllipsis="true"/>
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/icon_play" />
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/entr_password"
-                    android:hint="Kode dari koordinator"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary"
-                    android:textSize="20sp"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="140dp"
                     android:layout_height="wrap_content"
-                    app:met_baseColor="@color/colorPrimary"
-                    app:met_floatingLabel="highlight"
-                    app:met_primaryColor="@color/colorPrimary"
-                    app:met_singleLineEllipsis="true"/>
+                    android:text="Bermain"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="85dp"
+            android:layout_marginRight="85dp"
+            android:layout_marginBottom="15dp"
+            app:cardCornerRadius="1dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="6dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/icon_rank" />
+
+                <TextView
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:text="Lihat Peringkat"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
-        <LinearLayout
-            android:layout_below="@+id/info_login"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_margin="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <Button
-                android:id="@+id/btn_sign_in_peserta"
-                android:text="Sign In"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+        <android.support.v7.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_marginLeft="85dp"
+            android:layout_marginRight="85dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="1dp"
+            app:cardElevation="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:ignore="Suspicious0dp" />
-            <Button
-                android:id="@+id/btn_sign_up"
-                android:text="Sign Up"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                tools:ignore="Suspicious0dp" />
-        </LinearLayout>
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_margin="6dp"
+                android:orientation="vertical">
 
-    </RelativeLayout>
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/icon_panduan" />
 
+                <TextView
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="Panduan"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textSize="12sp" />
 
-    </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </GridLayout>
+
+</LinearLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kota203.quizmuseumgeologi">
+    package="com.example.kota203.museumgeologi_v0">
 
     <application
         android:allowBackup="true"
@@ -9,28 +9,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".pilihAktorActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginGuruActivity"></activity>
-
-        <activity android:name=".ManajemenKuisActivity"
-            android:parentActivityName=".LoginGuruActivity"></activity>
-
-        <activity android:name=".MulaiPermaiananActivity"
-            android:parentActivityName=".ManajemenKuisActivity"></activity>
-
+        <activity android:name=".Interface.Koordinator.RankingListActivity"></activity>
+        <activity android:name=".Interface.Koordinator.IntroActivity"></activity>
+        <activity android:name=".Interface.Koordinator.PanduanActivity"></activity>
+        <activity android:name=".Interface.Koordinator.InfoRuangActivity"
+            android:parentActivityName=".Interface.Koordinator.IntroActivity"></activity>
+        <activity android:name=".Interface.Koordinator.PilihAktorActivity"></activity>
+        <activity android:name=".Interface.Koordinator.LoginKoordinatorActivity"></activity>
         <activity android:name=".Interface.Peserta.LoginPesertaActivity"></activity>
-
+        <activity android:name=".Interface.Koordinator.ManajemenKuisActivity"></activity>
         <activity android:name=".Interface.Peserta.InfoKelompokActivity"
             android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>
-
-        <activity android:name=".Interface.Peserta.PetunjukActivity"></activity>
-
+        <activity android:name=".Interface.Koordinator.ListKelompokdanMulaiKuisActivity"
+            android:parentActivityName=".Interface.Koordinator.ManajemenKuisActivity"></activity>
     </application>
 
 </manifest>

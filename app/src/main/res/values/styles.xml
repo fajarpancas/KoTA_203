@@ -5,6 +5,13 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorButtonNormal">@color/myBlue</item>
+        <item name="colorControlHighlight">@color/myWhite</item>
     </style>
+    <style name="PrimaryColoredButton" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/myPeach</item>
+        <item name="colorControlHighlight">@color/myRed</item>
+    </style>
+
 
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gameplay"
-    tools:context="com.example.kota203.quizmuseumgeologi.MainActivity">
+    tools:context=".Interface.Koordinator.ManajemenKuisActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.12">
 
         <TextView
-            android:id="@+id/nama_guru_db"
+            android:id="@+id/nama_koordinator_db"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -68,7 +68,7 @@
         app:layout_constraintVertical_bias="0.14">
 
         <TextView
-            android:id="@+id/kode_permainan_db"
+            android:id="@+id/id_koordinator_db"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
