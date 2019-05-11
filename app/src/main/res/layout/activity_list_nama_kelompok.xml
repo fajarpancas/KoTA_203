@@ -80,107 +80,28 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_margin="6dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.24">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="fill_horizontal"
-            android:gravity="center_vertical"
-            android:text="List Kelompok :"
-            android:textAlignment="center"
-            android:textSize="12sp" />
-
-    </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="110dp"
+        android:padding="50dp"
         android:gravity="center_vertical">
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/kelompok_ke"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="Ke\n"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/btn_kelompok1"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content"
-                android:text="Kelompok 1" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/kelompok"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_kelompok2"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content"
-                android:text="Kelompok 2" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_kelompok3"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content"
-                android:text="Kelompok 3" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_kelompok4"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content"
-                android:text="Kelompok 4" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/btn_kelompok5"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content"
-                android:text="Kelompok 5" />
-
-
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:text="Kelompok"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -196,26 +117,12 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/mulai_kuis"
+                android:id="@+id/btn_kembali"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_gravity="bottom"
                 android:layout_height="wrap_content"
-                android:text="Mulai Kuis" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/hentikan_kuis"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom"
-                android:layout_height="wrap_content"
-                android:text="Hentikan Kuis" />
+                android:text="Kembali" />
 
 
         </RelativeLayout>

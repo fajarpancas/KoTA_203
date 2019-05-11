@@ -38,8 +38,8 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
     String statuKuis= "belum mulai";
 
     Button btn_generate_kelompok, btn_keluar;
-    public static final String EXTRA_TEXT_NAMA = "com.example.application.example.EXTRA_TEXT";
-    public static final String EXTRA_TEXT_KODE = "com.example.application.example.EXTRA_KODE";
+//    public static final String EXTRA_TEXT_NAMA = "com.example.application.example.EXTRA_TEXT";
+//    public static final String EXTRA_TEXT_KODE = "com.example.application.example.EXTRA_KODE";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference peserta = db.collection("peserta");
@@ -52,18 +52,18 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
         setContentView(R.layout.activity_manajemen_kuis);
 
         Intent intent = getIntent();
-        final String textNamaKoor = intent.getStringExtra(LoginKoordinatorActivity.EXTRA_TEXT_NAMA);
-        final String textKodeKoor = intent.getStringExtra(LoginKoordinatorActivity.EXTRA_TEXT_KODE);
+        final String textNamaKoor = intent.getStringExtra("NAMA_KOOR");
+        final String textIDKoor = intent.getStringExtra("ID_KOOR");
 //        final String textKodeKoor = "h0y5";
 
         TextView textViewNama = (TextView)findViewById(R.id.nama_koordinator_db);
         TextView textViewKode = (TextView)findViewById(R.id.id_koordinator_db);
         final TextView textViewTotal = (TextView)findViewById(R.id.jumlah_peserta_masuk);
 
-        getCount(textKodeKoor, textViewTotal);
+        getCount(textIDKoor, textViewTotal);
 
         textViewNama.setText("Hi, "+ textNamaKoor);
-        textViewKode.setText("Kode Permainan : "+ textKodeKoor);
+        textViewKode.setText("Kode Permainan : "+ textIDKoor);
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_klasifikasi);
         final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(ManajemenKuisActivity.this,
@@ -141,7 +141,7 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
         btn_generate_kelompok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivityListKelompokdanMulaiKuis(textKodeKoor, textNamaKoor);
+                openActivityListKelompokdanMulaiKuis(textIDKoor, textNamaKoor);
             }
         });
 
@@ -160,8 +160,8 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
         Kuis kuis = new Kuis(textIDKoor, kelompok, klasifikasi, statuKuis);
         dbkuis.document().set(kuis);
         Intent intent = new Intent(ManajemenKuisActivity.this, ListKelompokdanMulaiKuisActivity.class);
-        intent.putExtra(EXTRA_TEXT_KODE, textIDKoor);
-        intent.putExtra(EXTRA_TEXT_NAMA, textNamaKoor);
+        intent.putExtra("ID_KOOR", textIDKoor);
+        intent.putExtra("NAMA_KOOR", textNamaKoor);
         startActivity(intent);
     }
 

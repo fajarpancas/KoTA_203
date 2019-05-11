@@ -20,8 +20,8 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.util.Random;
 
 public class LoginKoordinatorActivity extends AppCompatActivity {
-    public static final String EXTRA_TEXT_NAMA = "com.example.application.example.EXTRA_TEXT";
-    public static final String EXTRA_TEXT_KODE = "com.example.application.example.EXTRA_KODE";
+//    public static final String EXTRA_TEXT_NAMA = "com.example.application.example.EXTRA_TEXT";
+//    public static final String EXTRA_TEXT_KODE = "com.example.application.example.EXTRA_KODE";
 
     MaterialEditText namaKoor, kodeKoor;
     String id_koordinator;
@@ -89,8 +89,8 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
 
     private void openActivityManajemenKuis(String namaKoor) {
         Intent intent = new Intent(LoginKoordinatorActivity.this, ManajemenKuisActivity.class);
-        intent.putExtra(EXTRA_TEXT_KODE, id_koordinator);
-        intent.putExtra(EXTRA_TEXT_NAMA, namaKoor);
+        intent.putExtra("ID_KOOR", id_koordinator);
+        intent.putExtra("NAMA_KOOR", namaKoor);
         startActivity(intent);
     }
 
