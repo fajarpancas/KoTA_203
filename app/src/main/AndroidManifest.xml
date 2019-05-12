@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--Manifest Koordinator-->
         <activity android:name=".Interface.Koordinator.RankingListActivity"></activity>
         <activity android:name=".Interface.Koordinator.IntroActivity"></activity>
         <activity android:name=".Interface.Koordinator.PanduanActivity"></activity>
@@ -23,14 +24,20 @@
             android:parentActivityName=".Interface.Koordinator.IntroActivity"></activity>
         <activity android:name=".Interface.Koordinator.PilihAktorActivity"></activity>
         <activity android:name=".Interface.Koordinator.LoginKoordinatorActivity"></activity>
-        <activity android:name=".Interface.Peserta.LoginPesertaActivity"></activity>
-        <activity android:name=".Interface.Koordinator.ManajemenKuisActivity"></activity>
-        <activity android:name=".Interface.Peserta.InfoKelompokActivity"
-            android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>
         <activity android:name=".Interface.Koordinator.ListKelompokdanMulaiKuisActivity"
             android:parentActivityName=".Interface.Koordinator.ManajemenKuisActivity"></activity>
         <activity android:name=".Interface.Koordinator.ListNamaSetiapKelompokKuisActivity"
             android:parentActivityName=".Interface.Koordinator.ListKelompokdanMulaiKuisActivity"></activity>
+
+        <!--Manifest Peserta-->
+        <activity android:name=".Interface.Peserta.LoginPesertaActivity"></activity>
+        <activity android:name=".Interface.Koordinator.ManajemenKuisActivity"></activity>
+        <activity android:name=".Interface.Peserta.InfoKelompokActivity"
+            android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>
+        <activity android:name=".Interface.Peserta.PetunjukKuisActivity"
+            android:parentActivityName=".Interface.Peserta.InfoKelompokActivity"></activity>
+        <activity android:name=".Interface.Peserta.PetunjukRuangActivity"
+            android:parentActivityName=".Interface.Peserta.PetunjukKuisActivity"></activity>
     </application>
 
 </manifest>

@@ -60,9 +60,17 @@ public class InfoKelompokActivity extends AppCompatActivity {
         btn_mulai_kuis_peserta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+                openPetunjukKuisActivity(textNamaPeserta, textIdPeserta, textIdKoor);
             }
         });
+    }
+
+    private void openPetunjukKuisActivity(String namaPeserta, String idPeserta, String idKoor) {
+        Intent intent = new Intent(InfoKelompokActivity.this, PetunjukKuisActivity.class);
+        intent.putExtra("NAMA_PESERTA", namaPeserta);
+        intent.putExtra("ID_PESERTA", idPeserta);
+        intent.putExtra("ID_KOOR", idKoor);
+        startActivity(intent);
     }
 
     private void getData(String idKoor, String idPeserta, final TextView textViewKlasifikasi, final TextView textViewKetKelompok){
