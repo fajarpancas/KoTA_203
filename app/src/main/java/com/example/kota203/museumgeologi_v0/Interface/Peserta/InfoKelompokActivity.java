@@ -7,10 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.LoginKoordinatorActivity;
-import com.example.kota203.museumgeologi_v0.Model.Klasifikasi;
 import com.example.kota203.museumgeologi_v0.Model.Kuis;
 import com.example.kota203.museumgeologi_v0.Model.Peserta;
 import com.example.kota203.museumgeologi_v0.R;
@@ -21,13 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class InfoKelompokActivity extends AppCompatActivity {
 
     String status_kuis_mulai = "mulai";
-
+    private int kelompok_info;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbkuis = db.collection("kuis");
     private CollectionReference dbpeserta = db.collection("peserta");
@@ -66,10 +60,11 @@ public class InfoKelompokActivity extends AppCompatActivity {
     }
 
     private void openPetunjukKuisActivity(String namaPeserta, String idPeserta, String idKoor) {
-        Intent intent = new Intent(InfoKelompokActivity.this, PetunjukKuisActivity.class);
+        Intent intent = new Intent(InfoKelompokActivity.this, PetunjukActivity.class);
         intent.putExtra("NAMA_PESERTA", namaPeserta);
         intent.putExtra("ID_PESERTA", idPeserta);
         intent.putExtra("ID_KOOR", idKoor);
+        intent.putExtra("KELOMPOK", kelompok_info);
         startActivity(intent);
     }
 
@@ -111,8 +106,8 @@ public class InfoKelompokActivity extends AppCompatActivity {
                     if (doc.get("kelompok") != null) {
                         Peserta data_peserta = doc.toObject(Peserta.class);
 
-                        Integer kelompok_nomor = data_peserta.getKelompok();
-                        kelompok += "Kelompok : " +kelompok_nomor;
+                        kelompok_info = data_peserta.getKelompok();
+                        kelompok += "Kelompok : " +kelompok_info;
                         textViewKetKelompok.setText(kelompok);
                     }else {
                         textViewKetKelompok.setText("Tunggu Koordinator membagikan kelompok");

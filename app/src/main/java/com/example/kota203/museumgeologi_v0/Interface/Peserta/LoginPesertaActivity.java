@@ -47,13 +47,13 @@ public class LoginPesertaActivity extends AppCompatActivity {
         btn_sign_in_peserta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                id_pesertaS = generateString(4);
-                signIn(namaPeserta.getText().toString(), idKoor.getText().toString());
+                id_pesertaS = generate_id_peserta(4);
+                signInPeserta(namaPeserta.getText().toString(), idKoor.getText().toString());
             }
         });
     }
 
-    private void signIn(final String namaPeserta, final String idKoor) {
+    private void signInPeserta(final String namaPeserta, final String idKoor) {
         dbkoordinator.whereEqualTo("id_koordinator", idKoor)
             .get()
             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -66,10 +66,10 @@ public class LoginPesertaActivity extends AppCompatActivity {
                             String idKoordinator = koordinator.getId_koordinator();
 
                             if (!idKoordinator.equals(idKoor)) {
-                                Toast.makeText(LoginPesertaActivity.this, "Kode Salah", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginPesertaActivity.this, "Kode Kuis Tidak Ditemukan", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(LoginPesertaActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                addNametoDB(idKoor, namaPeserta);
+                                Toast.makeText(LoginPesertaActivity.this, "Gabung Kuis Berhasil", Toast.LENGTH_SHORT).show();
+                                setDataPesertatoDB(idKoor, namaPeserta);
 //                                getDocIdKuis(idKoor, namaPeserta);
                                 openActivityInfoKelompok(namaPeserta, idKoor);
                             }
@@ -97,7 +97,7 @@ public class LoginPesertaActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private String generateString(int lenght){
+    private String generate_id_peserta(int lenght){
         char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
@@ -108,7 +108,7 @@ public class LoginPesertaActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    private void addNametoDB(String idKoor, final String namaPeserta) {
+    private void setDataPesertatoDB(String idKoor, final String namaPeserta) {
         final Peserta peserta = new Peserta(idKoor, id_pesertaS, namaPeserta);
         dbpeserta.add(peserta);
     }

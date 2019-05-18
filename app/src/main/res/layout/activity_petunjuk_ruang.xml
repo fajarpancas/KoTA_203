@@ -102,12 +102,12 @@
         android:orientation="vertical"
         android:padding="15dp">
 
-        <Button
-            android:id="@+id/btn_lanjutkan"
-            style="@style/Widget.AppCompat.Button.Colored"
+        <TextView
+            android:id="@+id/countdown_petunjuk_ruang"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lanjutkan" />
+            tools:text="03:00"
+            android:textAlignment="center" />
     </LinearLayout>
 
     <LinearLayout

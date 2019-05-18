@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Interface.Peserta.InfoKelompokActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,12 +32,12 @@
         <!--Manifest Peserta-->
         <activity android:name=".Interface.Peserta.LoginPesertaActivity"></activity>
         <activity android:name=".Interface.Koordinator.ManajemenKuisActivity"></activity>
-        <activity android:name=".Interface.Peserta.InfoKelompokActivity"
-            android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>
-        <activity android:name=".Interface.Peserta.PetunjukKuisActivity"
+        <!--<activity android:name=".Interface.Peserta.InfoKelompokActivity"-->
+            <!--android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>-->
+        <activity android:name=".Interface.Peserta.PetunjukActivity"
             android:parentActivityName=".Interface.Peserta.InfoKelompokActivity"></activity>
         <activity android:name=".Interface.Peserta.PetunjukRuangActivity"
-            android:parentActivityName=".Interface.Peserta.PetunjukKuisActivity"></activity>
+            android:parentActivityName=".Interface.Peserta.PetunjukActivity"></activity>
     </application>
 
 </manifest>

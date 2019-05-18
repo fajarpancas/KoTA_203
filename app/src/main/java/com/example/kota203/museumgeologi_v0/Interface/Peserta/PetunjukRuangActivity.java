@@ -2,6 +2,7 @@ package com.example.kota203.museumgeologi_v0.Interface.Peserta;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +20,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class PetunjukRuangActivity extends AppCompatActivity {
-    Button btn_lanjutkan;
+    private TextView countdownText;
+
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMiliseconds = 180000; //3 mins
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbkuis = db.collection("kuis");
@@ -38,23 +42,31 @@ public class PetunjukRuangActivity extends AppCompatActivity {
         TextView textViewPetunjukRuang = (TextView) findViewById(R.id.petunjuk_ruang);
         TextView textViewNamaPeserta = (TextView) findViewById(R.id.nama_peserta_db);
 
+        countdownText = findViewById(R.id.countdown_petunjuk_ruang);
+        startTimer();
+
         textViewNamaPeserta.setText(textNamaPeserta);
         textViewPetunjukRuang.setText("Petunjuk");
 
         getData(textIdKoor, textViewKlasifikasi);
-
-        btn_lanjutkan = (Button) findViewById(R.id.btn_lanjutkan);
-        btn_lanjutkan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                openActivityPetunjukRuang(textNamaPeserta, textIdPeserta, textIdKoor);
-                Toast.makeText(PetunjukRuangActivity.this, "lanjut", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
-//    private void openActivityPetunjukRuang(String textNamaPeserta, String textIdPeserta, String textIdKoor) {
-//        Intent intent = new Intent(PetunjukKuisActivity.this, PetunjukRuangActivity.class);
+    public void startTimer() {
+        countDownTimer = new CountDownTimer(timeLeftInMiliseconds, 1000) {
+            @Override
+            public void onTick(long l) {
+                timeLeftInMiliseconds =1;
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(PetunjukRuangActivity.this, "Times Up", Toast.LENGTH_SHORT).show();
+            }
+        }.start();
+    }
+
+    //    private void openActivityPetunjukRuang(String textNamaPeserta, String textIdPeserta, String textIdKoor) {
+//        Intent intent = new Intent(PetunjukActivity.this, PetunjukRuangActivity.class);
 //        intent.putExtra("NAMA_PESERTA", textNamaPeserta);
 //        intent.putExtra("ID_PESERTA", textIdPeserta);
 //        intent.putExtra("ID_KOOR", textIdKoor);

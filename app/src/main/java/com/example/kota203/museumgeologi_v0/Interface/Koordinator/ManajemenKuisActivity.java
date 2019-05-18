@@ -60,7 +60,7 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
         TextView textViewKode = (TextView)findViewById(R.id.id_koordinator_db);
         final TextView textViewTotal = (TextView)findViewById(R.id.jumlah_peserta_masuk);
 
-        getCount(textIDKoor, textViewTotal);
+        getTotalPesertaMasuk(textIDKoor, textViewTotal);
 
         textViewNama.setText("Hi, "+ textNamaKoor);
         textViewKode.setText("Kode Permainan : "+ textIDKoor);
@@ -209,7 +209,7 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
     }
 
     //deteksi realtime firestore
-    private void getCount(String kodeKoor, final TextView textViewTotal){
+    private void getTotalPesertaMasuk(String kodeKoor, final TextView textViewTotal){
         peserta.whereEqualTo("id_koordinator", kodeKoor)
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

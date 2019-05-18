@@ -46,7 +46,7 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
         btn_sign_in_koordinator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                id_koordinator = generateString(4);
+                id_koordinator = generate_id_koor(4);
                 Toast.makeText(LoginKoordinatorActivity.this, id_koordinator, Toast.LENGTH_SHORT).show();
                 signIn(namaKoor.getText().toString(), kodeKoor.getText().toString());
             }
@@ -68,7 +68,7 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
                                     Toast.makeText(LoginKoordinatorActivity.this, "Kode Salah", Toast.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(LoginKoordinatorActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                    addNametoDB(namaKoor);
+                                    setNamaKoortoDB(namaKoor);
 //                                    addKoortoKuisDB(namaKoor);
                                     openActivityManajemenKuis(namaKoor);
                                 }
@@ -94,7 +94,7 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private String generateString(int lenght){
+    private String generate_id_koor(int lenght){
         char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
@@ -105,7 +105,7 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-    private void addNametoDB(String namaKoor){
+    private void setNamaKoortoDB(String namaKoor){
         final Koordinator koordinator = new Koordinator(id_koordinator, namaKoor);
         dbkoordinator.add(koordinator);
     }
