@@ -157,12 +157,16 @@ public class ManajemenKuisActivity extends AppCompatActivity implements AdapterV
 
     private void openActivityListKelompokdanMulaiKuis(String textIDKoor, String textNamaKoor) {
         pembagianKelompok(textIDKoor);
-        Kuis kuis = new Kuis(textIDKoor, kelompok, klasifikasi, statuKuis);
-        dbkuis.document().set(kuis);
+        createKuis(textIDKoor);
         Intent intent = new Intent(ManajemenKuisActivity.this, ListKelompokdanMulaiKuisActivity.class);
         intent.putExtra("ID_KOOR", textIDKoor);
         intent.putExtra("NAMA_KOOR", textNamaKoor);
         startActivity(intent);
+    }
+
+    private void createKuis(String textIDKoor) {
+        Kuis kuis = new Kuis(textIDKoor, kelompok, klasifikasi, statuKuis);
+        dbkuis.document().set(kuis);
     }
 
     private void pembagianKelompok(String textIDKoor){

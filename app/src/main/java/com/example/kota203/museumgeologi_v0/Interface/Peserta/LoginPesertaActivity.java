@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.kota203.museumgeologi_v0.Interface.Koordinator.LoginKoordinatorActivity;
 import com.example.kota203.museumgeologi_v0.Model.Koordinator;
+import com.example.kota203.museumgeologi_v0.Model.Permainan;
 import com.example.kota203.museumgeologi_v0.Model.Peserta;
 import com.example.kota203.museumgeologi_v0.R;
 import com.google.android.gms.common.internal.Objects;
@@ -54,38 +56,32 @@ public class LoginPesertaActivity extends AppCompatActivity {
     }
 
     private void signInPeserta(final String namaPeserta, final String idKoor) {
-        dbkoordinator.whereEqualTo("id_koordinator", idKoor)
-            .get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(!namaPeserta.isEmpty()) {
-                    if (!idKoor.isEmpty()) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                            Koordinator koordinator = documentSnapshot.toObject(Koordinator.class);
-                            String idKoordinator = koordinator.getId_koordinator();
+        if(!namaPeserta.isEmpty()) {
+            if (!idKoor.isEmpty()) {
+                dbkoordinator.whereEqualTo("id_koordinator", idKoor)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                Koordinator koordinator = documentSnapshot.toObject(Koordinator.class);
+                                String idKoordinator = koordinator.getId_koordinator();
 
-                            if (!idKoordinator.equals(idKoor)) {
-                                Toast.makeText(LoginPesertaActivity.this, "Kode Kuis Tidak Ditemukan", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(LoginPesertaActivity.this, "Gabung Kuis Berhasil", Toast.LENGTH_SHORT).show();
-                                setDataPesertatoDB(idKoor, namaPeserta);
+                                if (!idKoordinator.equals(idKoor)) {
+                                    Toast.makeText(LoginPesertaActivity.this, "Kode Kuis Tidak Ditemukan", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(LoginPesertaActivity.this, "Gabung Kuis Berhasil", Toast.LENGTH_SHORT).show();
+                                    setDataPesertatoDB(idKoor, namaPeserta);
 //                                getDocIdKuis(idKoor, namaPeserta);
-                                openActivityInfoKelompok(namaPeserta, idKoor);
+                                    openActivityInfoKelompok(namaPeserta, idKoor);
+                                }
                             }
                         }
-                    } else {
-                        Toast.makeText(LoginPesertaActivity.this, "Kode harus diisi", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    if(!idKoor.isEmpty()){
-                        Toast.makeText(LoginPesertaActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginPesertaActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                }
-            });
+                    });
+            } else Toast.makeText(LoginPesertaActivity.this, "Kode harus diisi", Toast.LENGTH_SHORT).show();
+        } else if(!idKoor.isEmpty()){
+            Toast.makeText(LoginPesertaActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(LoginPesertaActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
     }
 
     private void openActivityInfoKelompok(String namaPeserta, String id_koordinator) {

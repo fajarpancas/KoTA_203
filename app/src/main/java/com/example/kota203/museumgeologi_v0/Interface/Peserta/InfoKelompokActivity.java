@@ -47,7 +47,7 @@ public class InfoKelompokActivity extends AppCompatActivity {
 
         textViewNamaPeserta.setText(textNamaPeserta);
 
-        getData(textIdKoor, textIdPeserta, textViewKlasifikasi, textViewKetKelompok);
+        getDataKuis(textIdKoor, textIdPeserta, textViewKlasifikasi, textViewKetKelompok);
         checkStatusKuis(textIdKoor);
 
         btn_mulai_kuis_peserta = (Button)findViewById(R.id.btn_mulai_kuis_peserta);
@@ -68,7 +68,7 @@ public class InfoKelompokActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void getData(String idKoor, String idPeserta, final TextView textViewKlasifikasi, final TextView textViewKetKelompok){
+    private void getDataKuis(String idKoor, String idPeserta, final TextView textViewKlasifikasi, final TextView textViewKetKelompok){
         dbkuis.whereEqualTo("id_koordinator", idKoor)
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -92,29 +92,33 @@ public class InfoKelompokActivity extends AppCompatActivity {
                 }
             }
         });
-        dbpeserta.whereEqualTo("id_peserta", idPeserta)
-        .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value,
-                                @Nullable FirebaseFirestoreException e) {
-                if (e != null){
-                    textViewKetKelompok.setText("Listen Failed");
-                    return;
-                }
-                String kelompok = "";
-                for (QueryDocumentSnapshot doc : value) {
-                    if (doc.get("kelompok") != null) {
-                        Peserta data_peserta = doc.toObject(Peserta.class);
+        getDataPeserta(idPeserta, textViewKetKelompok);
+    }
 
-                        kelompok_info = data_peserta.getKelompok();
-                        kelompok += "Kelompok : " +kelompok_info;
-                        textViewKetKelompok.setText(kelompok);
-                    }else {
-                        textViewKetKelompok.setText("Tunggu Koordinator membagikan kelompok");
+    private void getDataPeserta(String idPeserta, final TextView textViewKetKelompok) {
+        dbpeserta.whereEqualTo("id_peserta", idPeserta)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null){
+                            textViewKetKelompok.setText("Listen Failed");
+                            return;
+                        }
+                        String kelompok = "";
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("kelompok") != null) {
+                                Peserta data_peserta = doc.toObject(Peserta.class);
+
+                                kelompok_info = data_peserta.getKelompok();
+                                kelompok += "Kelompok : " +kelompok_info;
+                                textViewKetKelompok.setText(kelompok);
+                            }else {
+                                textViewKetKelompok.setText("Tunggu Koordinator membagikan kelompok");
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
     }
 
     public void checkStatusKuis(String textKode){

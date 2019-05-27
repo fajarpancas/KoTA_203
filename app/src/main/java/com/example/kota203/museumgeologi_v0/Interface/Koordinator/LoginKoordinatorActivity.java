@@ -54,37 +54,31 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
     }
 
     private void signIn(final String namaKoor, final String kodeKoor) {
-        permainan.whereEqualTo("kode_verifikasi", kodeKoor)
-            .get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(!namaKoor.isEmpty()) {
-                        if (!kodeKoor.isEmpty()) {
-                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                Permainan kodeVerifikasi = documentSnapshot.toObject(Permainan.class);
-                                String kodeVer = kodeVerifikasi.getKode_verifikasi();
-                                if (!kodeVer.equals(kodeKoor)) {
-                                    Toast.makeText(LoginKoordinatorActivity.this, "Kode Salah", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(LoginKoordinatorActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                    setNamaKoortoDB(namaKoor);
+        if(!namaKoor.isEmpty()) {
+            if (!kodeKoor.isEmpty()) {
+                permainan.whereEqualTo("kode_verifikasi", kodeKoor)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    Permainan kodeVerifikasi = documentSnapshot.toObject(Permainan.class);
+                                    String kodeVer = kodeVerifikasi.getKode_verifikasi();
+                                    if (!kodeVer.equals(kodeKoor)) {
+                                        Toast.makeText(LoginKoordinatorActivity.this, "Kode Salah", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(LoginKoordinatorActivity.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
+                                        setNamaKoortoDB(namaKoor);
 //                                    addKoortoKuisDB(namaKoor);
-                                    openActivityManajemenKuis(namaKoor);
+                                        openActivityManajemenKuis(namaKoor);
+                                    }
                                 }
                             }
-                        } else {
-                            Toast.makeText(LoginKoordinatorActivity.this, "Kode harus diisi", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        if(!kodeKoor.isEmpty()){
-                            Toast.makeText(LoginKoordinatorActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(LoginKoordinatorActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
+                        });
+            } else Toast.makeText(LoginKoordinatorActivity.this, "Kode Harus diisi", Toast.LENGTH_SHORT).show();
+        } else if(!kodeKoor.isEmpty()){
+            Toast.makeText(LoginKoordinatorActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(LoginKoordinatorActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
     }
 
     private void openActivityManajemenKuis(String namaKoor) {

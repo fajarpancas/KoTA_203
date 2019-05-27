@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kota203.museumgeologi_v0">
 
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <!--<meta-data android:name="com.inthecheesefactory.lab.glidepicasso.GlideConfiguration"-->
+                <!--android:value="GlideModule"></meta-data>-->
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Interface.Peserta.InfoKelompokActivity">
+        <activity android:name=".Interface.Peserta.PetunjukActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,11 +36,15 @@
         <!--Manifest Peserta-->
         <activity android:name=".Interface.Peserta.LoginPesertaActivity"></activity>
         <activity android:name=".Interface.Koordinator.ManajemenKuisActivity"></activity>
-        <!--<activity android:name=".Interface.Peserta.InfoKelompokActivity"-->
-            <!--android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>-->
-        <activity android:name=".Interface.Peserta.PetunjukActivity"
-            android:parentActivityName=".Interface.Peserta.InfoKelompokActivity"></activity>
-        <activity android:name=".Interface.Peserta.PetunjukRuangActivity"
+        <activity android:name=".Interface.Peserta.InfoKelompokActivity"
+            android:parentActivityName=".Interface.Peserta.LoginPesertaActivity"></activity>
+        <!--<activity android:name=".Interface.Peserta.PetunjukActivity"-->
+            <!--android:parentActivityName=".Interface.Peserta.InfoKelompokActivity"></activity>-->
+        <activity android:name=".Interface.Peserta.InformasiKoleksiActivity"
+            android:parentActivityName=".Interface.Peserta.PetunjukActivity"></activity>
+        <activity android:name=".Interface.Peserta.KuisActivity"
+            android:parentActivityName=".Interface.Peserta.InformasiKoleksiActivity"></activity>
+        <activity android:name=".Interface.Peserta.PeringkatActivity"
             android:parentActivityName=".Interface.Peserta.PetunjukActivity"></activity>
     </application>
 
