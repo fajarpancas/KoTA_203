@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/spinner_klasifikasi"
             android:layout_marginTop="20dp"
-            android:text="Jumlah Kelompok :"/>
+            android:text="Jumlah Kelompok :" />
 
         <Spinner
             android:id="@+id/spinner_kelompok"
@@ -172,7 +172,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="Klasifikasi :"/>
+            android:text="Klasifikasi :" />
 
         <Spinner
             android:id="@+id/spinner_klasifikasi"
@@ -193,6 +193,7 @@
 
         <Button
             android:id="@+id/btn_keluar"
+            style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="69dp"
             android:layout_height="21dp"
             android:background="#bf0000"
@@ -200,7 +201,6 @@
             android:paddingLeft="5dp"
             android:paddingRight="0dp"
             android:text="Keluar"
-            style="@style/Widget.AppCompat.Button.Small"
             android:textColor="#fff"
             android:textSize="8dp" />
     </LinearLayout>
