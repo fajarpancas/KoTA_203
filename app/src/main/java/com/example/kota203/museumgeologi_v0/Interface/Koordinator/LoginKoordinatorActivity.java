@@ -81,7 +81,7 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
         } else Toast.makeText(LoginKoordinatorActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
     }
 
-    private void openActivityManajemenKuis(String namaKoor) {
+        private void openActivityManajemenKuis(String namaKoor) {
         Intent intent = new Intent(LoginKoordinatorActivity.this, ManajemenKuisActivity.class);
         intent.putExtra("ID_KOOR", id_koordinator);
         intent.putExtra("NAMA_KOOR", namaKoor);
