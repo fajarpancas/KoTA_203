@@ -26,9 +26,9 @@ public class ListNamaSetiapKelompokKuisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_nama_kelompok);
 
         Intent intent = getIntent();
-        final String textNama = intent.getStringExtra("NAMA_KOOR");
-        final String textIdKoor = intent.getStringExtra("ID_KOOR");
-        int textkelompok = getIntent().getExtras().getInt("KELOMPOK");
+        final String nama_koor = intent.getStringExtra("NAMA_KOOR");
+        final String id_koor = intent.getStringExtra("ID_KOOR");
+        int kelompok = getIntent().getExtras().getInt("KELOMPOK");
 //        Toast.makeText(ListNamaSetiapKelompokKuisActivity.this, StringKelompok, Toast.LENGTH_SHORT).show();
 
         TextView textViewNama = (TextView)findViewById(R.id.nama_koordinator_db);
@@ -36,15 +36,15 @@ public class ListNamaSetiapKelompokKuisActivity extends AppCompatActivity {
         TextView textViewKelompokKe = (TextView)findViewById(R.id.kelompok_ke);
         textViewKelompok = (TextView)findViewById(R.id.kelompok);
 
-        textViewNama.setText("Hi, "+ textNama);
-        textViewId.setText("Kode Permainan : "+ textIdKoor);
-        textViewKelompokKe.setText("Kelompok" + textkelompok);
+        textViewNama.setText("Hi, "+ nama_koor);
+        textViewId.setText("Kode Permainan : "+ id_koor);
+        textViewKelompokKe.setText("Kelompok" + kelompok);
 
-        getDataPesertabyKelompok(textkelompok, textIdKoor);
+        getDataPesertabyKelompok(kelompok, id_koor);
     }
 
-    public void getDataPesertabyKelompok(int kelompok,String idKoor) {
-        dbpeserta.whereEqualTo("kelompok", kelompok).whereEqualTo("id_koordinator", idKoor)
+    public void getDataPesertabyKelompok(int kelompok,String id_koor) {
+        dbpeserta.whereEqualTo("kelompok", kelompok).whereEqualTo("id_koordinator", id_koor)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

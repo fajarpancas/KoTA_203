@@ -1,17 +1,15 @@
-package com.example.kota203.museumgeologi_v0.Interface.Koordinator;
+package com.example.kota203.museumgeologi_v0.Interface;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.example.kota203.museumgeologi_v0.Model.Klasifikasi;
 import com.example.kota203.museumgeologi_v0.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;

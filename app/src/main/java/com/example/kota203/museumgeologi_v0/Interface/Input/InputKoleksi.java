@@ -1,4 +1,4 @@
-package com.example.kota203.museumgeologi_v0.Interface;
+package com.example.kota203.museumgeologi_v0.Interface.Input;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,19 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.LoginKoordinatorActivity;
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.ManajemenKuisActivity;
-import com.example.kota203.museumgeologi_v0.Interface.Peserta.LoginPesertaActivity;
 import com.example.kota203.museumgeologi_v0.Model.Koleksi;
-import com.example.kota203.museumgeologi_v0.Model.Koordinator;
-import com.example.kota203.museumgeologi_v0.Model.Permainan;
-import com.example.kota203.museumgeologi_v0.Model.Peserta;
 import com.example.kota203.museumgeologi_v0.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.Random;
@@ -62,10 +53,13 @@ public class InputKoleksi extends AppCompatActivity {
         int IDruang = Integer.parseInt(idRuang);
         int IDklas = Integer.parseInt(idKlasifikasi);
         int IDkoleksi = Integer.parseInt(idKoleksi);
-        if(!TextUtils.isEmpty(gambar)){
+        if(!idRuang.isEmpty() || !idKlasifikasi.isEmpty() || !idKoleksi.isEmpty() || !namaKoleksi.isEmpty() || !deskripsi.isEmpty()
+                || !gambar.isEmpty()){
             Koleksi koleksi = new Koleksi(IDruang, IDklas, IDkoleksi, namaKoleksi, deskripsi, gambar);
             dbkoleksi.add(koleksi);
             Toast.makeText(this, "Input Data Berhasil", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(InputKoleksi.this, PilihInput.class);
+            startActivity(intent);
         }else{
             Toast.makeText(this, "Data Belum Terisi Semua", Toast.LENGTH_LONG).show();
         }

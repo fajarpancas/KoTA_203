@@ -1,4 +1,4 @@
-package com.example.kota203.museumgeologi_v0.Interface.Koordinator;
+package com.example.kota203.museumgeologi_v0.Interface;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

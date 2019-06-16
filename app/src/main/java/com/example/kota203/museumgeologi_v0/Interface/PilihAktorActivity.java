@@ -1,4 +1,4 @@
-package com.example.kota203.museumgeologi_v0.Interface.Koordinator;
+package com.example.kota203.museumgeologi_v0.Interface;
 
 
 import android.content.Intent;
@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 
-import com.example.kota203.museumgeologi_v0.Interface.Peserta.LoginPesertaActivity;
+import com.example.kota203.museumgeologi_v0.Interface.Koordinator.VerifikasiKoordinatorActivity;
+import com.example.kota203.museumgeologi_v0.Interface.Peserta.VerifikasiGabungKuisActivity;
 import com.example.kota203.museumgeologi_v0.R;
 
 public class PilihAktorActivity extends AppCompatActivity {
@@ -63,12 +64,12 @@ public class PilihAktorActivity extends AppCompatActivity {
     }
 
     private void openLoginPeserta() {
-        Intent i = new Intent(PilihAktorActivity.this, LoginPesertaActivity.class);
+        Intent i = new Intent(PilihAktorActivity.this, VerifikasiGabungKuisActivity.class);
         startActivity(i);
     }
 
     private void openLoginKoordinator() {
-        Intent i = new Intent(PilihAktorActivity.this, LoginKoordinatorActivity.class);
+        Intent i = new Intent(PilihAktorActivity.this, VerifikasiKoordinatorActivity.class);
         startActivity(i);
     }
 

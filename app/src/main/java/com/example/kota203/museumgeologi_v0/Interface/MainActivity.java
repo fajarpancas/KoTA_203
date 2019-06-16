@@ -1,4 +1,4 @@
-package com.example.kota203.museumgeologi_v0;
+package com.example.kota203.museumgeologi_v0.Interface;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,10 +8,8 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.Toast;
 
-import com.example.kota203.museumgeologi_v0.Interface.InputKoleksi;
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.IntroActivity;
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.PanduanActivity;
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.RankingListActivity;
+import com.example.kota203.museumgeologi_v0.Interface.Input.PilihInput;
+import com.example.kota203.museumgeologi_v0.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +19,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        database = FirebaseDatabase.getInstance();
-//        guru = database.getReference("Guru");
 
         mainGridbermain = (GridLayout)findViewById(R.id.mainGridbermain);
 
@@ -44,13 +39,14 @@ public class MainActivity extends AppCompatActivity {
                         openIntro();
                     } else if (finalI == 1) {
                         openRankingList();
-                    } else if (finalI == 2) {
-                        openPanduan();
+                    } else if (finalI ==2) {
+                        openInputData();
                     }
                 }
             });
         }
     }
+
 
     @Override
     public void onBackPressed()
@@ -65,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openRankingList() {
-        Intent i = new Intent(MainActivity.this, RankingListActivity.class);
+        Intent i = new Intent(MainActivity.this, PeringkatActivity.class);
         startActivity(i);
     }
 
-    private void openPanduan() {
-        Intent i = new Intent(MainActivity.this, InputKoleksi.class);
+    private void openInputData() {
+        Intent i = new Intent(MainActivity.this, PilihInput.class);
         startActivity(i);
     }
 }

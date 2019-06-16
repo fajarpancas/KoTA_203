@@ -4,8 +4,8 @@ import com.google.firebase.firestore.Exclude;
 
 public class Koordinator {
     private String id_koordinator;
-    private String namaKoor;
-//    private String status_kuis;
+    private String nama_koordinator;
+    private String nama_sekolah;
     String documentId;
 
     @Exclude
@@ -21,10 +21,10 @@ public class Koordinator {
         //no needed construct
     }
 
-    public Koordinator(String id_koordinator, String namaKoor){
+    public Koordinator(String id_koordinator, String nama_koordinator, String nama_sekolah){
         this.id_koordinator = id_koordinator;
-        this.namaKoor = namaKoor;
-//        this.status_kuis = status_kuis;
+        this.nama_koordinator = nama_koordinator;
+        this.nama_sekolah = nama_sekolah;
     }
 
     public String getId_koordinator() {
@@ -35,19 +35,19 @@ public class Koordinator {
         this.id_koordinator = id_koordinator;
     }
 
-    public String getNamaKoor() {
-        return namaKoor;
+    public String getNama_koordinator() {
+        return nama_koordinator;
     }
 
-    public void setNamaKoor(String namaKoor) {
-        this.namaKoor = namaKoor;
+    public void setNama_koordinator(String nama_koordinator) {
+        this.nama_koordinator = nama_koordinator;
     }
 
-//    public String getStatus_kuis() {
-//        return status_kuis;
-//    }
-//
-//    public void setStatus_kuis(String status_kuis) {
-//        this.status_kuis = status_kuis;
-//    }
+    public String getNama_sekolah() {
+        return nama_sekolah;
+    }
+
+    public void setNama_sekolah(String nama_sekolah) {
+        this.nama_sekolah = nama_sekolah;
+    }
 }

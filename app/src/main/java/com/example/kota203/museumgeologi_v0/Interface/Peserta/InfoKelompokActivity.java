@@ -2,11 +2,13 @@ package com.example.kota203.museumgeologi_v0.Interface.Peserta;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kota203.museumgeologi_v0.Model.Kuis;
 import com.example.kota203.museumgeologi_v0.Model.Peserta;
@@ -25,6 +27,10 @@ public class InfoKelompokActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbkuis = db.collection("kuis");
     private CollectionReference dbpeserta = db.collection("peserta");
+    private TextView textCountdownPersiapan, textViewKlasifikasi, textViewKetKelompok, textViewNamaPeserta ;
+
+    private CountDownTimer countDownTimerPersiapan;
+    private long timeLeftInMilisecondsPersiapan = 10000;
 
     Button btn_mulai_kuis_peserta;
 
@@ -41,22 +47,15 @@ public class InfoKelompokActivity extends AppCompatActivity {
         final String textIdKoor = intent.getStringExtra("ID_KOOR");
 //        Toast.makeText(InfoKelompokActivity.this, textIdKoor, Toast.LENGTH_SHORT).show();
 
-        TextView textViewKlasifikasi = (TextView) findViewById(R.id.klasifikasi);
-        TextView textViewKetKelompok = (TextView) findViewById(R.id.keterangan);
-        TextView textViewNamaPeserta = (TextView) findViewById(R.id.nama_peserta_db);
+        textViewKlasifikasi = (TextView) findViewById(R.id.klasifikasi);
+        textViewKetKelompok = (TextView) findViewById(R.id.keterangan);
+        textViewNamaPeserta = (TextView) findViewById(R.id.nama_peserta_db);
+        textCountdownPersiapan = findViewById(R.id.countdown_persiapan_kuis_peserta);
 
         textViewNamaPeserta.setText(textNamaPeserta);
 
-        getDataKuis(textIdKoor, textIdPeserta, textViewKlasifikasi, textViewKetKelompok);
-        checkStatusKuis(textIdKoor);
-
-        btn_mulai_kuis_peserta = (Button)findViewById(R.id.btn_mulai_kuis_peserta);
-        btn_mulai_kuis_peserta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openPetunjukKuisActivity(textNamaPeserta, textIdPeserta, textIdKoor);
-            }
-        });
+        getDataKuis(textIdKoor, textIdPeserta);
+        checkStatusKuis(textNamaPeserta, textIdPeserta, textIdKoor);
     }
 
     private void openPetunjukKuisActivity(String namaPeserta, String idPeserta, String idKoor) {
@@ -68,7 +67,37 @@ public class InfoKelompokActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void getDataKuis(String idKoor, String idPeserta, final TextView textViewKlasifikasi, final TextView textViewKetKelompok){
+    public void startTimerPersiapan(final String NamaKoor, final String IdPeserta, final String IdKoor) {
+        countDownTimerPersiapan = new CountDownTimer(timeLeftInMilisecondsPersiapan, 1000) {
+            @Override
+            public void onTick(long l) {
+                timeLeftInMilisecondsPersiapan = l;
+                updateTimerPersiapan();
+            }
+
+            @Override
+            public void onFinish() {
+                openPetunjukKuisActivity(NamaKoor, IdPeserta, IdKoor);
+            }
+        }.start();
+    }
+
+    private void updateTimerPersiapan() {
+        int minutes = (int) timeLeftInMilisecondsPersiapan / 60000;
+        int seconds = (int) timeLeftInMilisecondsPersiapan % 60000 / 1000;
+
+        String timeLeftText;
+        timeLeftText = "Kuis akan dimulai pada hitungan : " + minutes;
+        timeLeftText += ":";
+        if (seconds < 10) timeLeftText += "0";
+        timeLeftText += seconds;
+
+        textCountdownPersiapan.setText(timeLeftText);
+    }
+
+
+
+    private void getDataKuis(String idKoor, String idPeserta){
         dbkuis.whereEqualTo("id_koordinator", idKoor)
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -121,8 +150,8 @@ public class InfoKelompokActivity extends AppCompatActivity {
                 });
     }
 
-    public void checkStatusKuis(String textKode){
-        dbkuis.whereEqualTo("id_koordinator", textKode)
+    public void checkStatusKuis(final String textNamaPeserta, final String textIdPeserta, final String textIdKoor ){
+        dbkuis.whereEqualTo("id_koordinator", textIdKoor)
         .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value,
@@ -135,9 +164,7 @@ public class InfoKelompokActivity extends AppCompatActivity {
                 Kuis status = doc.toObject(Kuis.class);
                 String status_kuis = status.getStatus_kuis();
                 if (status_kuis.equals(status_kuis_mulai)) { //mulai
-                    btn_mulai_kuis_peserta.setEnabled(true);
-                } else{  //belum mulai
-                    btn_mulai_kuis_peserta.setEnabled(false);
+                    startTimerPersiapan(textNamaPeserta, textIdPeserta, textIdKoor);
                 }
             }
             }

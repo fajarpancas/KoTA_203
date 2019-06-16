@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_login"
-    tools:context=".Interface.Koordinator.LoginKoordinatorActivity">
+    tools:context=".Interface.Koordinator.VerifikasiKoordinatorActivity">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
                 android:padding="16dp">
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/namaPeserta"
+                    android:id="@+id/form_nama_peserta"
                     android:drawablePadding="15dp"
                     android:drawableLeft="@drawable/ic_person_outline_black_24dp"
                     android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                     app:met_singleLineEllipsis="true" />
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/idKoor"
+                    android:id="@+id/form_id_koordinator"
                     android:drawablePadding="15dp"
                     android:drawableLeft="@drawable/ic_lock_outline_black_24dp"
                     android:layout_width="match_parent"

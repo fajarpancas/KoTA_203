@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/bgintro"
     android:weightSum="10"
-    tools:context=".Interface.Koordinator.PilihAktorActivity">
+    tools:context=".Interface.PilihAktorActivity">
 
     <RelativeLayout
         android:layout_weight="2"

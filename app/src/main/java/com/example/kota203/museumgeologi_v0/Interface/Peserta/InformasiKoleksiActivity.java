@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.IntroActivity;
 import com.example.kota203.museumgeologi_v0.Model.Kuis;
 import com.example.kota203.museumgeologi_v0.R;
 import com.google.firebase.firestore.CollectionReference;
@@ -24,10 +22,11 @@ public class InformasiKoleksiActivity extends AppCompatActivity {
 
     private CountDownTimer countDownTimerRuang, countDownTimerToKuis;
     private long timeLeftInMilisecondsRuang = 180000; //3 mins
-    private long timeLeftInMilisecondsToKuis = 6000;
+    private long timeLeftInMilisecondsToKuis = 10000;
     boolean timerRuang = true;
     boolean timerKuis = true;
     boolean KuisAvailable = false;
+    String textNamaPeserta, textIdPeserta, textIdKoor;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbkuis = db.collection("kuis");
@@ -38,9 +37,9 @@ public class InformasiKoleksiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_informasi_koleksi);
 
         Intent intent = getIntent();
-        final String textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
-        final String textIdPeserta = intent.getStringExtra("ID_PESERTA");
-        final String textIdKoor = intent.getStringExtra("ID_KOOR");
+        textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
+        textIdPeserta = intent.getStringExtra("ID_PESERTA");
+        textIdKoor = intent.getStringExtra("ID_KOOR");
 
         TextView textViewKlasifikasi = (TextView) findViewById(R.id.klasifikasi);
         TextView textViewNamaPeserta = (TextView) findViewById(R.id.nama_peserta_db);
@@ -56,7 +55,12 @@ public class InformasiKoleksiActivity extends AppCompatActivity {
 
         textViewNamaPeserta.setText(textNamaPeserta);
 
+        checkStatusKuis();
         getDataKuis(textIdKoor, textViewKlasifikasi);
+    }
+
+    public void stopTimerKunjungan() {
+        countDownTimerRuang.cancel();
     }
 
     public void startTimerRuang() {
@@ -89,6 +93,10 @@ public class InformasiKoleksiActivity extends AppCompatActivity {
         countdownTextRuang.setText(timeLeftText);
     }
 
+    public void stopTimerToKuis() {
+        countDownTimerToKuis.cancel();
+    }
+
     public void startTimerToKuis() {
         countDownTimerToKuis = new CountDownTimer(timeLeftInMilisecondsToKuis, 1000) {
             @Override
@@ -104,6 +112,9 @@ public class InformasiKoleksiActivity extends AppCompatActivity {
                 if(KuisAvailable == true){
                     KuisAvailable = false;
                     Intent i = new Intent(InformasiKoleksiActivity.this, KuisActivity.class);
+                    i.putExtra("NAMA_PESERTA", textNamaPeserta);
+                    i.putExtra("ID_PESERTA", textIdPeserta);
+                    i.putExtra("ID_KOOR", textIdKoor);
                     i.putExtra("TimeKunjungan", timeLeftInMilisecondsRuang);
                     startActivity(i);
                 }
@@ -157,4 +168,31 @@ public class InformasiKoleksiActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void checkStatusKuis(){
+        dbkuis.whereEqualTo("id_koordinator", textIdKoor)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null){
+//                            textViewTotal.setText("Listen Failed");
+                            return;
+                        }
+                        for (QueryDocumentSnapshot doc : value) {
+                            Kuis status = doc.toObject(Kuis.class);
+                            String status_kuis = status.getStatus_kuis();
+                            if(status_kuis.equals("dihentikan")){
+                                stopTimerKunjungan();
+                                stopTimerToKuis();
+                                Intent intent = new Intent(InformasiKoleksiActivity.this, KuisSelesaiActivity.class);
+                                intent.putExtra("ID_PESERTA", textIdPeserta);
+                                intent.putExtra("ID_KOOR", textIdKoor);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                });
+    }
 }
+

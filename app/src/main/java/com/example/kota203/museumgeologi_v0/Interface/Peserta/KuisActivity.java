@@ -3,44 +3,44 @@ package com.example.kota203.museumgeologi_v0.Interface.Peserta;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kota203.museumgeologi_v0.Model.Klasifikasi;
 import com.example.kota203.museumgeologi_v0.Model.Kuis;
 import com.example.kota203.museumgeologi_v0.Model.Peserta;
 import com.example.kota203.museumgeologi_v0.Model.Soal;
 import com.example.kota203.museumgeologi_v0.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.rengwuxian.materialedittext.MaterialEditText;
-import com.squareup.picasso.Picasso;
-
-import java.sql.Time;
 
 public class KuisActivity extends AppCompatActivity {
 
-    int minutes, seconds;
+    int minutes, seconds, secondsRuang, minutesRuang;
     GridLayout mainGridAnswer;
     private TextView countdownTextKuis, txtAnswerA, txtAnswerB, txtAnswerC, txtAnswerD, txtQuestion;
     private ImageView imgAnswerA, imgAnswerB, imgAnswerC, imgAnswerD, imgQuestion;
-    private CountDownTimer countDownTimer;
+    private CountDownTimer countDownTimer, countDownTimerRuang;
     private long timeLeftInMiliseconds = 60000; //1 mins
     private long TimeRuang;
     boolean timerRunning = true;
+    String textNamaPeserta,textIdPeserta, textIdKoor;
+    String hasilJawaban;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference dbsoal = db.collection("Soal");
     private CollectionReference dbpeserta = db.collection("peserta");
+    private CollectionReference db_kuis = db.collection("kuis");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +53,12 @@ public class KuisActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         TimeRuang = getIntent().getLongExtra("TimeKunjungan", 0);
-//        final String textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
-//        final String textIdPeserta = intent.getStringExtra("ID_PESERTA");
-//        final String textIdKoor = intent.getStringExtra("ID_KOOR");
+        textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
+        textIdPeserta = intent.getStringExtra("ID_PESERTA");
+        textIdKoor = intent.getStringExtra("ID_KOOR");
 
-        final String textIdPeserta = "ujnl";
-        final String textIdKoor = "vtnb";
+        TextView textViewNama = findViewById(R.id.nama_peserta_db);
+        textViewNama.setText(textNamaPeserta);
 
         mainGridAnswer = (GridLayout) findViewById(R.id.mainGridAnswer);
         txtQuestion = (TextView) findViewById(R.id.question_text);
@@ -70,7 +70,9 @@ public class KuisActivity extends AppCompatActivity {
 
         countdownTextKuis = findViewById(R.id.countdown_kuis);
 
+        checkStatusKuis();
         inputJawaban(mainGridAnswer, klasifikasi, jenis_klasifikasi, soal, textIdPeserta, textIdKoor);
+        startTimerRuang();
         loadQuestion(jenis_klasifikasi, klasifikasi, soal);
     }
 
@@ -80,18 +82,27 @@ public class KuisActivity extends AppCompatActivity {
     }
 
     public void startTimer() {
-        countDownTimer = new CountDownTimer(TimeRuang, 1000) {
+        countDownTimer = new CountDownTimer(timeLeftInMiliseconds, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                TimeRuang = millisUntilFinished;
+                timeLeftInMiliseconds = millisUntilFinished;
                 updateTimer();
             }
 
             @Override
             public void onFinish() {
                 Toast.makeText(KuisActivity.this, "Times Up", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(PetunjukActivity.this, InformasiKoleksiActivity.class);
-//                startActivity(intent);
+                hasilJawaban = "Tidak Menjawab";
+                int poin = 0;
+                stopTimer();
+                Toast.makeText(KuisActivity.this, "Tidak menjawab", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(KuisActivity.this, InfoJawabanActivity.class);
+                intent.putExtra("NAMA_PESERTA", textNamaPeserta);
+                intent.putExtra("ID_PESERTA", textIdPeserta);
+                intent.putExtra("ID_KOOR", textIdKoor);
+                intent.putExtra("JAWABAN", hasilJawaban);
+                intent.putExtra("POIN", poin);
+                startActivity(intent);
             }
         }.start();
 
@@ -99,8 +110,8 @@ public class KuisActivity extends AppCompatActivity {
     }
 
     public void updateTimer() {
-        minutes = (int) (TimeRuang / 1000) / 60;
-        seconds = (int) (TimeRuang / 1000) % 60;
+        minutes = (int) (timeLeftInMiliseconds / 1000) / 60;
+        seconds = (int) (timeLeftInMiliseconds / 1000) % 60;
 
         String timeLeft;
         timeLeft = ""+seconds;
@@ -112,6 +123,37 @@ public class KuisActivity extends AppCompatActivity {
         timeLeftText += seconds;
 
         countdownTextKuis.setText(timeLeftText);
+    }
+
+    public void stopTimerKunjungan() {
+        countDownTimerRuang.cancel();
+    }
+
+    public void startTimerRuang() {
+        countDownTimerRuang = new CountDownTimer(TimeRuang, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                TimeRuang = millisUntilFinished;
+                updateTimerRuang();
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(KuisActivity.this, "Times Up", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(KuisActivity.this, InfoJawabanActivity.class);
+//                intent.putExtra("NAMA_PESERTA", textNamaPeserta);
+//                intent.putExtra("ID_PESERTA", textIdPeserta);
+//                intent.putExtra("ID_KOOR", textIdKoor);
+//                startActivity(intent);
+            }
+        }.start();
+
+        timerRunning = true;
+    }
+
+    public void updateTimerRuang() {
+        minutesRuang = (int) (TimeRuang / 1000) / 60;
+        secondsRuang = (int) (TimeRuang / 1000) % 60;
     }
 
     private void loadQuestion(String jenis_klasifikasi, int klasifikasi, int soal) {
@@ -204,18 +246,37 @@ public class KuisActivity extends AppCompatActivity {
                     String var_answer = getSoal.getCorrectAnswer();
 
                     if(var_answer.equals(jawaban)){
+                        hasilJawaban = "Jawaban Benar";
                         stopTimer();
-                        updatePoin(IdPeserta, IdKoor);
+                        updatePoin();
+                        int poin = seconds * 10;
+                        Intent intent = new Intent(KuisActivity.this, InfoJawabanActivity.class);
+                        intent.putExtra("NAMA_PESERTA", textNamaPeserta);
+                        intent.putExtra("ID_PESERTA", textIdPeserta);
+                        intent.putExtra("ID_KOOR", textIdKoor);
+                        intent.putExtra("JAWABAN", hasilJawaban);
+                        intent.putExtra("POIN", poin);
+                        startActivity(intent);
                     }else if(!var_answer.equals(jawaban)){
+                        hasilJawaban = "Jawaban Salah";
+                        stopTimer();
+                        int poin = 0;
                         Toast.makeText(KuisActivity.this, "Wrong Answer", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(KuisActivity.this, InfoJawabanActivity.class);
+                        intent.putExtra("NAMA_PESERTA", textNamaPeserta);
+                        intent.putExtra("ID_PESERTA", textIdPeserta);
+                        intent.putExtra("ID_KOOR", textIdKoor);
+                        intent.putExtra("JAWABAN", hasilJawaban);
+                        intent.putExtra("POIN", poin);
+                        startActivity(intent);
                     }
                 }
             }
         });
     }
 
-    private void updatePoin(String IdPeserta, String IdKoor) {
-        dbpeserta.whereEqualTo("id_peserta", IdPeserta).whereEqualTo("id_koordinator", IdKoor)
+    private void updatePoin() {
+        dbpeserta.whereEqualTo("id_peserta", textIdPeserta).whereEqualTo("id_koordinator", textIdKoor)
         .get()
         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -231,12 +292,38 @@ public class KuisActivity extends AppCompatActivity {
                     Integer kelompok = data_peserta.getKelompok();
                     Integer poin = data_peserta.getPoin();
 
-                    int poinTotal = poin + seconds;
+                    int poinTotal = poin + (seconds* 10);
 
                     Peserta update_peserta_db = new Peserta(idKoordinator, idPeserta, namaPesesrta, kelompok, poinTotal);
                     dbpeserta.document(idDocumentPeserta).set(update_peserta_db);
                 }
             }
         });
+    }
+
+    public void checkStatusKuis(){
+        db_kuis.whereEqualTo("id_koordinator", textIdKoor)
+            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot value,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null){
+//                            textViewTotal.setText("Listen Failed");
+                        return;
+                    }
+                    for (QueryDocumentSnapshot doc : value) {
+                        Kuis status = doc.toObject(Kuis.class);
+                        String status_kuis = status.getStatus_kuis();
+                        if(status_kuis.equals("dihentikan")){
+                            stopTimerKunjungan();
+                            stopTimer();
+                            Intent intent = new Intent(KuisActivity.this, KuisSelesaiActivity.class);
+                            intent.putExtra("ID_PESERTA", textIdPeserta);
+                            intent.putExtra("ID_KOOR", textIdKoor);
+                            startActivity(intent);
+                        }
+                    }
+                }
+            });
     }
 }

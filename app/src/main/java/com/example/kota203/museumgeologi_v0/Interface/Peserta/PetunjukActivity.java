@@ -11,11 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.ListKelompokdanMulaiKuisActivity;
-import com.example.kota203.museumgeologi_v0.Interface.Koordinator.ManajemenKuisActivity;
+import com.example.kota203.museumgeologi_v0.Interface.PeringkatActivity;
 import com.example.kota203.museumgeologi_v0.Model.Alur;
 import com.example.kota203.museumgeologi_v0.Model.Kuis;
-import com.example.kota203.museumgeologi_v0.Model.Peserta;
 import com.example.kota203.museumgeologi_v0.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,14 +25,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class PetunjukActivity extends AppCompatActivity {
     private TextView countdownText;
-    private CountDownTimer countDownTimer;
-//    private long timeLeftInMiliseconds = 180000; //3 mins
-private long timeLeftInMiliseconds = 6000;
+    private CountDownTimer countDownTimerPetunjukKuis, countDownTimerPetunjukRuang;
+    private long timeLeftInMilisecondsPetunjukRuang = 15000;
+    private long timeLeftInMilisecondsPetunjukKuis = 10000;
 
     private TextView textViewPetunjuk, textNamaRuang, textInfoLokasiSalah;
     private ImageView imgPetunjuk;
-    Button btn_lanjutkan;
-    Boolean btn_lanjutkanKlik = false;
+    String textNamaPeserta, textIdPeserta, textIdKoor;
+    Button btn_cek_lokasi;
     Boolean runningTimer;
 
     boolean beaconDetect = false;
@@ -49,12 +47,12 @@ private long timeLeftInMiliseconds = 6000;
         setContentView(R.layout.activity_petunjuk);
 
         Intent intent = getIntent();
-        final String textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
-        final String textIdPeserta = intent.getStringExtra("ID_PESERTA");
-//        final String textIdKoor = intent.getStringExtra("ID_KOOR");
-        final String textIdKoor = "h0y5";
-//        final int kelompok = getIntent().getExtras().getInt("KELOMPOK");
-        final int kelompok = 1;
+        textNamaPeserta = intent.getStringExtra("NAMA_PESERTA");
+        textIdPeserta = intent.getStringExtra("ID_PESERTA");
+        textIdKoor = intent.getStringExtra("ID_KOOR");
+//        final String textIdKoor = "h0y5";
+        final int kelompok = getIntent().getExtras().getInt("KELOMPOK");
+//        final int kelompok = 1;
 
         TextView textViewKlasifikasi = (TextView) findViewById(R.id.klasifikasi);
         TextView textViewNamaPeserta = (TextView) findViewById(R.id.nama_peserta_db);
@@ -65,22 +63,18 @@ private long timeLeftInMiliseconds = 6000;
 
         countdownText = findViewById(R.id.countdown_petunjuk_ruang);
 
+        checkStatusKuis();
         getData(textIdKoor, textViewKlasifikasi);
 
         textViewNamaPeserta.setText(textNamaPeserta);
+        startTimerPetunjukKuis(kelompok, textIdKoor);
+        btn_cek_lokasi = (Button) findViewById(R.id.btn_cek_lokasi);
+        btn_cek_lokasi.setVisibility(View.INVISIBLE);
 
-        btn_lanjutkan = (Button) findViewById(R.id.btn_lanjutkan);
-
-
-        btn_lanjutkan.setOnClickListener(new View.OnClickListener() {
+        btn_cek_lokasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(btn_lanjutkanKlik){
-                    cekLokasi();
-                }else{
-                    PetunjukRuang(kelompok, textIdKoor);
-                    startTimer();
-                }
+                cekLokasi();
             }
         });
     }
@@ -143,12 +137,6 @@ private long timeLeftInMiliseconds = 6000;
                         }
                         textViewPetunjuk.setText(data);
 
-                        alurfromdb = alurfromdb + 1;
-                        if(alurfromdb == 6){
-                            alurfromdb = 1;
-                        }
-                        Alur update_alur = new Alur(idKoordinator, kelompok, alurfromdb, alurKe);
-                        dbalur.document(getDocumentId).set(update_alur);
                     }else if(alurKe > 5){
                         Toast.makeText(PetunjukActivity.this, "intent ke ranking", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(PetunjukActivity.this, PeringkatActivity.class);
@@ -159,22 +147,51 @@ private long timeLeftInMiliseconds = 6000;
 
         });
 
-        btn_lanjutkan.setVisibility(View.INVISIBLE);
-
     }
-//
-//    public void Timer(){
-//        if(runningTimer){
-//            startTimer();
-//        }
-//    }
 
-    public void startTimer() {
-        countDownTimer = new CountDownTimer(timeLeftInMiliseconds, 1000) {
+    public void stopTimerPetunjukKuis() {
+        countDownTimerPetunjukKuis.cancel();
+    }
+
+    public void startTimerPetunjukKuis(final int kelompok, final String IdKoor) {
+        countDownTimerPetunjukKuis = new CountDownTimer(timeLeftInMilisecondsPetunjukKuis, 1000) {
             @Override
             public void onTick(long l) {
-                timeLeftInMiliseconds = l;
-                updateTimer();
+                timeLeftInMilisecondsPetunjukKuis = l;
+                updateTimerPetunjukKuis();
+            }
+
+            @Override
+            public void onFinish() {
+                PetunjukRuang(kelompok, IdKoor);
+                startTimerPetunjukRuang();
+            }
+        }.start();
+    }
+
+    public void updateTimerPetunjukKuis() {
+        int minutes = (int) timeLeftInMilisecondsPetunjukKuis / 60000;
+        int seconds = (int) timeLeftInMilisecondsPetunjukKuis % 60000 / 1000;
+
+        String timeLeftText;
+        timeLeftText = "Waktu tersisa menuju petunjuk ruang :" + minutes;
+        timeLeftText += ":";
+        if (seconds < 10) timeLeftText += "0";
+        timeLeftText += seconds;
+
+        countdownText.setText(timeLeftText);
+    }
+
+    public void stopTimerPetunjukRuang() {
+        countDownTimerPetunjukRuang.cancel();
+    }
+
+    public void startTimerPetunjukRuang() {
+        countDownTimerPetunjukRuang = new CountDownTimer(timeLeftInMilisecondsPetunjukRuang, 1000) {
+            @Override
+            public void onTick(long l) {
+                timeLeftInMilisecondsPetunjukRuang = l;
+                updateTimerPetunjukRuang();
             }
 
             @Override
@@ -183,23 +200,25 @@ private long timeLeftInMiliseconds = 6000;
                 cekLokasi();
                 if(beaconDetect){
                     Intent intent = new Intent(PetunjukActivity.this, InformasiKoleksiActivity.class);
+                    intent.putExtra("NAMA_PESERTA", textNamaPeserta);
+                    intent.putExtra("ID_PESERTA", textIdPeserta);
+                    intent.putExtra("ID_KOOR", textIdKoor);
                     startActivity(intent);
                 }else{
-                    btn_lanjutkanKlik = true;
-                    btn_lanjutkan.setText("Cek ulang lokasi");
+                    btn_cek_lokasi.setText("Cek ulang lokasi");
                     textInfoLokasiSalah.setText("Anda belum berada di lokasi yang sesuai");
-                    btn_lanjutkan.setVisibility(View.VISIBLE);
+                    btn_cek_lokasi.setVisibility(View.VISIBLE);
                 }
             }
         }.start();
     }
 
-    public void updateTimer() {
-        int minutes = (int) timeLeftInMiliseconds / 60000;
-        int seconds = (int) timeLeftInMiliseconds % 60000 / 1000;
+    public void updateTimerPetunjukRuang() {
+        int minutes = (int) timeLeftInMilisecondsPetunjukRuang / 60000;
+        int seconds = (int) timeLeftInMilisecondsPetunjukRuang % 60000 / 1000;
 
         String timeLeftText;
-        timeLeftText = "" + minutes;
+        timeLeftText = "Waktu tersisa menuju lokasi " + minutes;
         timeLeftText += ":";
         if (seconds < 10) timeLeftText += "0";
         timeLeftText += seconds;
@@ -231,5 +250,35 @@ private long timeLeftInMiliseconds = 6000;
                 }
             }
         });
+    }
+
+    public void checkStatusKuis(){
+        dbkuis.whereEqualTo("id_koordinator", textIdKoor)
+            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot value,
+                                    @Nullable FirebaseFirestoreException e) {
+                if (e != null){
+//                            textViewTotal.setText("Listen Failed");
+                    return;
+                }
+                for (QueryDocumentSnapshot doc : value) {
+                    Kuis status = doc.toObject(Kuis.class);
+                    String status_kuis = status.getStatus_kuis();
+                    if(status_kuis.equals("dihentikan")){
+                        if(countDownTimerPetunjukKuis != null){
+                            stopTimerPetunjukKuis();
+                        }
+                        if(countDownTimerPetunjukRuang != null){
+                            stopTimerPetunjukRuang();
+                        }
+                        Intent intent = new Intent(PetunjukActivity.this, KuisSelesaiActivity.class);
+                        intent.putExtra("ID_PESERTA", textIdPeserta);
+                        intent.putExtra("ID_KOOR", textIdKoor);
+                        startActivity(intent);
+                    }
+                }
+                }
+            });
     }
 }

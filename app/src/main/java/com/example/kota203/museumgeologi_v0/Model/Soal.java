@@ -4,6 +4,7 @@ public class Soal {
     private int id_klasifikasi;
     private String jenis_klasifikasi;
     private int id_soal;
+    private String question_type;
     private String img_question;
     private String txt_question;
     private String answerA;
@@ -14,6 +15,21 @@ public class Soal {
 
     public Soal(){
         //
+    }
+
+    public Soal(int id_soal, int id_klasifikasi, String jenis_klasifikasi, String question_type, String img_question, String txt_question,
+                String answerA, String answerB, String answerC, String answerD, String correctAnswer){
+        this.id_soal = id_soal;
+        this.id_klasifikasi = id_klasifikasi;
+        this.jenis_klasifikasi = jenis_klasifikasi;
+        this.question_type = question_type;
+        this.img_question = img_question;
+        this.txt_question = txt_question;
+        this.answerA = answerA;
+        this.answerB = answerB;
+        this.answerC = answerC;
+        this.answerD = answerD;
+        this.correctAnswer = correctAnswer;
     }
 
     public int getId_klasifikasi() {
