@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.GridLayout;
 import android.widget.Toast;
 
+import com.example.kota203.museumgeologi_v0.Interface.InputKoleksi;
 import com.example.kota203.museumgeologi_v0.Interface.Koordinator.IntroActivity;
 import com.example.kota203.museumgeologi_v0.Interface.Koordinator.PanduanActivity;
 import com.example.kota203.museumgeologi_v0.Interface.Koordinator.RankingListActivity;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPanduan() {
-        Intent i = new Intent(MainActivity.this, PanduanActivity.class);
+        Intent i = new Intent(MainActivity.this, InputKoleksi.class);
         startActivity(i);
     }
 }

@@ -38,10 +38,10 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_koordinator);
 
-        namaKoor = (MaterialEditText)findViewById(R.id.namaKoor);
-        kodeKoor = (MaterialEditText)findViewById(R.id.kodeKoor);
+        namaKoor = (MaterialEditText) findViewById(R.id.namaKoor);
+        kodeKoor = (MaterialEditText) findViewById(R.id.kodeKoor);
 
-        btn_sign_in_koordinator = (Button)findViewById(R.id.btn_sign_in_koordinator);
+        btn_sign_in_koordinator = (Button) findViewById(R.id.btn_sign_in_koordinator);
 
         btn_sign_in_koordinator.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +54,7 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
     }
 
     private void signIn(final String namaKoor, final String kodeKoor) {
-        if(!namaKoor.isEmpty()) {
+        if (!namaKoor.isEmpty()) {
             if (!kodeKoor.isEmpty()) {
                 permainan.whereEqualTo("kode_verifikasi", kodeKoor)
                         .get()
@@ -75,37 +75,35 @@ public class LoginKoordinatorActivity extends AppCompatActivity {
                                 }
                             }
                         });
-            } else Toast.makeText(LoginKoordinatorActivity.this, "Kode Harus diisi", Toast.LENGTH_SHORT).show();
-        } else if(!kodeKoor.isEmpty()){
+            } else
+                Toast.makeText(LoginKoordinatorActivity.this, "Kode Harus diisi", Toast.LENGTH_SHORT).show();
+        } else if (!kodeKoor.isEmpty()) {
             Toast.makeText(LoginKoordinatorActivity.this, "Nama harus diisi", Toast.LENGTH_SHORT).show();
-        } else Toast.makeText(LoginKoordinatorActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(LoginKoordinatorActivity.this, "Nama dan Kode harus diisi", Toast.LENGTH_SHORT).show();
     }
 
-        private void openActivityManajemenKuis(String namaKoor) {
+    private void openActivityManajemenKuis(String namaKoor) {
         Intent intent = new Intent(LoginKoordinatorActivity.this, ManajemenKuisActivity.class);
         intent.putExtra("ID_KOOR", id_koordinator);
         intent.putExtra("NAMA_KOOR", namaKoor);
         startActivity(intent);
     }
 
-    private String generate_id_koor(int lenght){
+    private String generate_id_koor(int lenght) {
         char[] chars = "abcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
         Random random = new Random();
-        for(int i = 0; i<lenght; i++){
+        for (int i = 0; i < lenght; i++) {
             char c = chars[random.nextInt(chars.length)];
             stringBuilder.append(c);
         }
         return stringBuilder.toString();
     }
 
-    private void setNamaKoortoDB(String namaKoor){
+    private void setNamaKoortoDB(String namaKoor) {
         final Koordinator koordinator = new Koordinator(id_koordinator, namaKoor);
         dbkoordinator.add(koordinator);
     }
-
-//    private void addKoortoKuisDB(String namaKoor) {
-//        final KuisKoordinator koordinator = new KuisKoordinator(id_koordinator, status);
-//        dbkuis.add(koordinator);
-//    }
 }
+
